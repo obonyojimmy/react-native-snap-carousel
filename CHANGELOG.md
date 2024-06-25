@@ -1,6 +1,7 @@
 ## v3.9.2
 
 * Update package dependencies to eliminate vulnerability warnings
+* Fix error due to deprecated ViewPropTypes usage
 * Add lint script & fix existing linting errors
 
 ## v3.9.1
