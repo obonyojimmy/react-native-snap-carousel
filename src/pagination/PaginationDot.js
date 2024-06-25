@@ -17,7 +17,11 @@ export default class PaginationDot extends PureComponent {
         inactiveStyle: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
         index: PropTypes.number,
         style: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
-        tappable: PropTypes.bool
+        tappable: PropTypes.bool,
+        animatedDuration: PropTypes.number,
+        animatedFriction: PropTypes.number,
+        animatedTension: PropTypes.number,
+        delayPressInDot: PropTypes.number
     };
 
     constructor (props) {
@@ -43,7 +47,7 @@ export default class PaginationDot extends PureComponent {
 
     _animate (toValue = 0) {
         const { animColor, animOpacity, animTransform } = this.state;
-        const { animatedDuration, animatedFriction, animatedTension } = this.props
+        const { animatedDuration, animatedFriction, animatedTension } = this.props;
 
         const commonProperties = {
             toValue,
@@ -52,7 +56,7 @@ export default class PaginationDot extends PureComponent {
             useNativeDriver: !this._shouldAnimateColor
         };
 
-        let animations = [
+        const animations = [
             Animated.timing(animOpacity, {
                 easing: Easing.linear,
                 ...commonProperties
@@ -109,12 +113,14 @@ export default class PaginationDot extends PureComponent {
                 })
             }]
         };
-        const animatedColor = this._shouldAnimateColor ? {
-            backgroundColor: animColor.interpolate({
-                inputRange: [0, 1],
-                outputRange: [inactiveColor, color]
-            })
-        } : {};
+        const animatedColor = this._shouldAnimateColor ?
+            {
+                backgroundColor: animColor.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [inactiveColor, color]
+                })
+            } :
+            {};
 
         const dotContainerStyle = [
             styles.sliderPaginationDotContainer,
@@ -129,17 +135,19 @@ export default class PaginationDot extends PureComponent {
             animatedColor
         ];
 
-        const onPress = tappable ? () => {
-            try {
-                const currentRef = carouselRef.current || carouselRef;
-                currentRef._snapToItem(currentRef._getPositionIndex(index));
-            } catch (error) {
-                console.warn(
-                    'react-native-snap-carousel | Pagination: ' +
+        const onPress = tappable ?
+            () => {
+                try {
+                    const currentRef = carouselRef.current || carouselRef;
+                    currentRef._snapToItem(currentRef._getPositionIndex(index));
+                } catch (error) {
+                    console.warn(
+                        'react-native-snap-carousel | Pagination: ' +
                     '`carouselRef` has to be a Carousel ref.\n' + error
-                );
-            }
-        } : undefined;
+                    );
+                }
+            } :
+            undefined;
 
         return (
             <TouchableOpacity

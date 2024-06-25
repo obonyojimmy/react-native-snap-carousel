@@ -38,7 +38,7 @@ export default class ParallaxImage extends Component {
         showSpinner: true,
         spinnerColor: 'rgba(0, 0, 0, 0.4)',
         AnimatedImageComponent: Animated.Image
-    }
+    };
 
     constructor (props) {
         super(props);
@@ -91,7 +91,7 @@ export default class ParallaxImage extends Component {
                             x - ((sliderWidth - itemWidth) / 2);
 
                         this.setState({
-                            offset: offset,
+                            offset,
                             width: dimensions && dimensions.width ?
                                 dimensions.width :
                                 Math.ceil(width),
@@ -161,22 +161,28 @@ export default class ParallaxImage extends Component {
             width: vertical ? width : width + parallaxPadding * 2,
             height: vertical ? height + parallaxPadding * 2 : height,
             opacity: animOpacity,
-            transform: scrollPosition ? [
-                {
-                    translateX: !vertical ? scrollPosition.interpolate({
-                        inputRange: [offset - sliderWidth, offset + sliderWidth],
-                        outputRange: [-parallaxPadding, parallaxPadding],
-                        extrapolate: 'clamp'
-                    }) : 0
-                },
-                {
-                    translateY: vertical ? scrollPosition.interpolate({
-                        inputRange: [offset - sliderHeight, offset + sliderHeight],
-                        outputRange: [-parallaxPadding, parallaxPadding],
-                        extrapolate: 'clamp'
-                    }) : 0
-                }
-            ] : []
+            transform: scrollPosition ?
+                [
+                    {
+                        translateX: !vertical ?
+                            scrollPosition.interpolate({
+                                inputRange: [offset - sliderWidth, offset + sliderWidth],
+                                outputRange: [-parallaxPadding, parallaxPadding],
+                                extrapolate: 'clamp'
+                            }) :
+                            0
+                    },
+                    {
+                        translateY: vertical ?
+                            scrollPosition.interpolate({
+                                inputRange: [offset - sliderHeight, offset + sliderHeight],
+                                outputRange: [-parallaxPadding, parallaxPadding],
+                                extrapolate: 'clamp'
+                            }) :
+                            0
+                    }
+                ] :
+                []
         };
 
         return (
@@ -193,15 +199,17 @@ export default class ParallaxImage extends Component {
         const { status } = this.state;
         const { showSpinner, spinnerColor } = this.props;
 
-        return status === 1 && showSpinner ? (
-            <View style={styles.loaderContainer}>
-                <ActivityIndicator
-                  size={'small'}
-                  color={spinnerColor}
-                  animating={true}
-                />
-            </View>
-        ) : false;
+        return status === 1 && showSpinner ?
+            (
+                <View style={styles.loaderContainer}>
+                    <ActivityIndicator
+                      size={'small'}
+                      color={spinnerColor}
+                      animating={true}
+                    />
+                </View>
+            ) :
+            false;
     }
 
     render () {

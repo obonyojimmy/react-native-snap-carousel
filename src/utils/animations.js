@@ -14,7 +14,7 @@ const IS_ANDROID = Platform.OS === 'android';
 // ]
 export function getInputRangeFromIndexes (range, index, carouselProps) {
     const sizeRef = carouselProps.vertical ? carouselProps.itemHeight : carouselProps.itemWidth;
-    let inputRange = [];
+    const inputRange = [];
 
     for (let i = 0; i < range.length; i++) {
         inputRange.push((index - range[i]) * sizeRef);
@@ -144,59 +144,61 @@ export function stackAnimatedStyles (index, animatedValue, carouselProps, cardOf
 
     const opacityOutputRange = carouselProps.inactiveSlideOpacity === 1 ? [1, 1, 1, 0] : [1, 0.75, 0.5, 0];
 
-    return IS_ANDROID ? {
+    return IS_ANDROID ?
+        {
         // elevation: carouselProps.data.length - index, // fix zIndex bug visually, but not from a logic point of view
-        opacity: animatedValue.interpolate({
-            inputRange: [-3, -2, -1, 0],
-            outputRange: opacityOutputRange.reverse(),
-            extrapolate: 'clamp'
-        }),
-        transform: [{
-            scale: animatedValue.interpolate({
-                inputRange: [-2, -1, 0, 1],
-                outputRange: [card2Scale, card1Scale, 1, card1Scale],
+            opacity: animatedValue.interpolate({
+                inputRange: [-3, -2, -1, 0],
+                outputRange: opacityOutputRange.reverse(),
                 extrapolate: 'clamp'
-            })
-        }, {
-            [translateProp]: animatedValue.interpolate({
-                inputRange: [-3, -2, -1, 0, 1],
-                outputRange: [
-                    getTranslateFromScale(-3, card2Scale),
-                    getTranslateFromScale(-2, card2Scale),
-                    getTranslateFromScale(-1, card1Scale),
-                    0,
-                    sizeRef * 0.5
-                ],
+            }),
+            transform: [{
+                scale: animatedValue.interpolate({
+                    inputRange: [-2, -1, 0, 1],
+                    outputRange: [card2Scale, card1Scale, 1, card1Scale],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                [translateProp]: animatedValue.interpolate({
+                    inputRange: [-3, -2, -1, 0, 1],
+                    outputRange: [
+                        getTranslateFromScale(-3, card2Scale),
+                        getTranslateFromScale(-2, card2Scale),
+                        getTranslateFromScale(-1, card1Scale),
+                        0,
+                        sizeRef * 0.5
+                    ],
+                    extrapolate: 'clamp'
+                })
+            }]
+        } :
+        {
+            zIndex: carouselProps.data.length - index,
+            opacity: animatedValue.interpolate({
+                inputRange: [0, 1, 2, 3],
+                outputRange: opacityOutputRange,
                 extrapolate: 'clamp'
-            })
-        }]
-    } : {
-        zIndex: carouselProps.data.length - index,
-        opacity: animatedValue.interpolate({
-            inputRange: [0, 1, 2, 3],
-            outputRange: opacityOutputRange,
-            extrapolate: 'clamp'
-        }),
-        transform: [{
-            scale: animatedValue.interpolate({
-                inputRange: [-1, 0, 1, 2],
-                outputRange: [card1Scale, 1, card1Scale, card2Scale],
-                extrapolate: 'clamp'
-            })
-        }, {
-            [translateProp]: animatedValue.interpolate({
-                inputRange: [-1, 0, 1, 2, 3],
-                outputRange: [
-                    -sizeRef * 0.5,
-                    0,
-                    getTranslateFromScale(1, card1Scale),
-                    getTranslateFromScale(2, card2Scale),
-                    getTranslateFromScale(3, card2Scale)
-                ],
-                extrapolate: 'clamp'
-            })
-        }]
-    };
+            }),
+            transform: [{
+                scale: animatedValue.interpolate({
+                    inputRange: [-1, 0, 1, 2],
+                    outputRange: [card1Scale, 1, card1Scale, card2Scale],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                [translateProp]: animatedValue.interpolate({
+                    inputRange: [-1, 0, 1, 2, 3],
+                    outputRange: [
+                        -sizeRef * 0.5,
+                        0,
+                        getTranslateFromScale(1, card1Scale),
+                        getTranslateFromScale(2, card2Scale),
+                        getTranslateFromScale(3, card2Scale)
+                    ],
+                    extrapolate: 'clamp'
+                })
+            }]
+        };
 }
 
 // Tinder animation
@@ -235,91 +237,93 @@ export function tinderAnimatedStyles (index, animatedValue, carouselProps, cardO
         return Math.round(cardOffset * Math.abs(cardIndex) / scale);
     };
 
-    return IS_ANDROID ? {
-        // elevation: carouselProps.data.length - index, // fix zIndex bug visually, but not from a logic point of view
-        opacity: animatedValue.interpolate({
-            inputRange: [-3, -2, -1, 0, 1],
-            outputRange: [0, peekingCardsOpacity, peekingCardsOpacity, 1, 0],
-            extrapolate: 'clamp'
-        }),
-        transform: [{
-            scale: animatedValue.interpolate({
-                inputRange: [-3, -2, -1, 0],
-                outputRange: [card3Scale, card2Scale, card1Scale, 1],
-                extrapolate: 'clamp'
-            })
-        }, {
-            rotate: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0deg', '22deg'],
-                extrapolate: 'clamp'
-            })
-        }, {
-            [mainTranslateProp]: animatedValue.interpolate({
+    return IS_ANDROID ?
+        {
+            // elevation: carouselProps.data.length - index, // fix zIndex bug visually, but not from a logic point of view
+            opacity: animatedValue.interpolate({
                 inputRange: [-3, -2, -1, 0, 1],
-                outputRange: [
-                    getMainTranslateFromScale(-3, card3Scale),
-                    getMainTranslateFromScale(-2, card2Scale),
-                    getMainTranslateFromScale(-1, card1Scale),
-                    0,
-                    sizeRef * 1.1
-                ],
+                outputRange: [0, peekingCardsOpacity, peekingCardsOpacity, 1, 0],
                 extrapolate: 'clamp'
-            })
-        }, {
-            [secondaryTranslateProp]: animatedValue.interpolate({
-                inputRange: [-3, -2, -1, 0],
-                outputRange: [
-                    getSecondaryTranslateFromScale(-3, card3Scale),
-                    getSecondaryTranslateFromScale(-2, card2Scale),
-                    getSecondaryTranslateFromScale(-1, card1Scale),
-                    0
-                ],
-                extrapolate: 'clamp'
-            })
-        }]
-    } : {
-        zIndex: carouselProps.data.length - index,
-        opacity: animatedValue.interpolate({
-            inputRange: [-1, 0, 1, 2, 3],
-            outputRange: [0, 1, peekingCardsOpacity, peekingCardsOpacity, 0],
-            extrapolate: 'clamp'
-        }),
-        transform: [{
-            scale: animatedValue.interpolate({
-                inputRange: [0, 1, 2, 3],
-                outputRange: [1, card1Scale, card2Scale, card3Scale],
-                extrapolate: 'clamp'
-            })
-        }, {
-            rotate: animatedValue.interpolate({
-                inputRange: [-1, 0],
-                outputRange: ['-22deg', '0deg'],
-                extrapolate: 'clamp'
-            })
-        }, {
-            [mainTranslateProp]: animatedValue.interpolate({
+            }),
+            transform: [{
+                scale: animatedValue.interpolate({
+                    inputRange: [-3, -2, -1, 0],
+                    outputRange: [card3Scale, card2Scale, card1Scale, 1],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                rotate: animatedValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '22deg'],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                [mainTranslateProp]: animatedValue.interpolate({
+                    inputRange: [-3, -2, -1, 0, 1],
+                    outputRange: [
+                        getMainTranslateFromScale(-3, card3Scale),
+                        getMainTranslateFromScale(-2, card2Scale),
+                        getMainTranslateFromScale(-1, card1Scale),
+                        0,
+                        sizeRef * 1.1
+                    ],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                [secondaryTranslateProp]: animatedValue.interpolate({
+                    inputRange: [-3, -2, -1, 0],
+                    outputRange: [
+                        getSecondaryTranslateFromScale(-3, card3Scale),
+                        getSecondaryTranslateFromScale(-2, card2Scale),
+                        getSecondaryTranslateFromScale(-1, card1Scale),
+                        0
+                    ],
+                    extrapolate: 'clamp'
+                })
+            }]
+        } :
+        {
+            zIndex: carouselProps.data.length - index,
+            opacity: animatedValue.interpolate({
                 inputRange: [-1, 0, 1, 2, 3],
-                outputRange: [
-                    -sizeRef * 1.1,
-                    0,
-                    getMainTranslateFromScale(1, card1Scale),
-                    getMainTranslateFromScale(2, card2Scale),
-                    getMainTranslateFromScale(3, card3Scale)
-                ],
+                outputRange: [0, 1, peekingCardsOpacity, peekingCardsOpacity, 0],
                 extrapolate: 'clamp'
-            })
-        }, {
-            [secondaryTranslateProp]: animatedValue.interpolate({
-                inputRange: [0, 1, 2, 3],
-                outputRange: [
-                    0,
-                    getSecondaryTranslateFromScale(1, card1Scale),
-                    getSecondaryTranslateFromScale(2, card2Scale),
-                    getSecondaryTranslateFromScale(3, card3Scale)
-                ],
-                extrapolate: 'clamp'
-            })
-        }]
-    };
+            }),
+            transform: [{
+                scale: animatedValue.interpolate({
+                    inputRange: [0, 1, 2, 3],
+                    outputRange: [1, card1Scale, card2Scale, card3Scale],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                rotate: animatedValue.interpolate({
+                    inputRange: [-1, 0],
+                    outputRange: ['-22deg', '0deg'],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                [mainTranslateProp]: animatedValue.interpolate({
+                    inputRange: [-1, 0, 1, 2, 3],
+                    outputRange: [
+                        -sizeRef * 1.1,
+                        0,
+                        getMainTranslateFromScale(1, card1Scale),
+                        getMainTranslateFromScale(2, card2Scale),
+                        getMainTranslateFromScale(3, card3Scale)
+                    ],
+                    extrapolate: 'clamp'
+                })
+            }, {
+                [secondaryTranslateProp]: animatedValue.interpolate({
+                    inputRange: [0, 1, 2, 3],
+                    outputRange: [
+                        0,
+                        getSecondaryTranslateFromScale(1, card1Scale),
+                        getSecondaryTranslateFromScale(2, card2Scale),
+                        getSecondaryTranslateFromScale(3, card3Scale)
+                    ],
+                    extrapolate: 'clamp'
+                })
+            }]
+        };
 }

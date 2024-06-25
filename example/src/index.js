@@ -20,11 +20,11 @@ export default class example extends Component {
         };
     }
 
-    _renderItem ({item, index}) {
+    _renderItem ({ item, index }) {
         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
     }
 
-    _renderItemWithParallax ({item, index}, parallaxProps) {
+    _renderItemWithParallax ({ item, index }, parallaxProps) {
         return (
             <SliderEntry
               data={item}
@@ -35,11 +35,11 @@ export default class example extends Component {
         );
     }
 
-    _renderLightItem ({item, index}) {
+    _renderLightItem ({ item, index }) {
         return <SliderEntry data={item} even={false} />;
     }
 
-    _renderDarkItem ({item, index}) {
+    _renderDarkItem ({ item, index }) {
         return <SliderEntry data={item} even={true} />;
     }
 
@@ -51,7 +51,7 @@ export default class example extends Component {
                 <Text style={styles.title}>{`Example ${number}`}</Text>
                 <Text style={styles.subtitle}>{title}</Text>
                 <Carousel
-                  ref={c => this._slider1Ref = c}
+                  ref={c => { this._slider1Ref = c; }}
                   data={ENTRIES1}
                   renderItem={this._renderItemWithParallax}
                   sliderWidth={sliderWidth}
@@ -136,23 +136,25 @@ export default class example extends Component {
         const isEven = refNumber % 2 === 0;
 
         // Do not render examples on Android; because of the zIndex bug, they won't work as is
-        return !IS_ANDROID ? (
-            <View style={[styles.exampleContainer, isEven ? styles.exampleContainerDark : styles.exampleContainerLight]}>
-                <Text style={[styles.title, isEven ? {} : styles.titleDark]}>{`Example ${number}`}</Text>
-                <Text style={[styles.subtitle, isEven ? {} : styles.titleDark]}>{title}</Text>
-                <Carousel
-                  data={isEven ? ENTRIES2 : ENTRIES1}
-                  renderItem={renderItemFunc}
-                  sliderWidth={sliderWidth}
-                  itemWidth={itemWidth}
-                  containerCustomStyle={styles.slider}
-                  contentContainerCustomStyle={styles.sliderContentContainer}
-                  scrollInterpolator={scrollInterpolators[`scrollInterpolator${refNumber}`]}
-                  slideInterpolatedStyle={animatedStyles[`animatedStyles${refNumber}`]}
-                  useScrollView={true}
-                />
-            </View>
-        ) : false;
+        return !IS_ANDROID ?
+            (
+                <View style={[styles.exampleContainer, isEven ? styles.exampleContainerDark : styles.exampleContainerLight]}>
+                    <Text style={[styles.title, isEven ? {} : styles.titleDark]}>{`Example ${number}`}</Text>
+                    <Text style={[styles.subtitle, isEven ? {} : styles.titleDark]}>{title}</Text>
+                    <Carousel
+                      data={isEven ? ENTRIES2 : ENTRIES1}
+                      renderItem={renderItemFunc}
+                      sliderWidth={sliderWidth}
+                      itemWidth={itemWidth}
+                      containerCustomStyle={styles.slider}
+                      contentContainerCustomStyle={styles.sliderContentContainer}
+                      scrollInterpolator={scrollInterpolators[`scrollInterpolator${refNumber}`]}
+                      slideInterpolatedStyle={animatedStyles[`animatedStyles${refNumber}`]}
+                      useScrollView={true}
+                    />
+                </View>
+            ) :
+            false;
     }
 
     get gradient () {
