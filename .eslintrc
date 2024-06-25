@@ -1,8 +1,9 @@
 {
-    "parser"  : "babel-eslint",
+    "parser"  : "@babel/eslint-parser",
     "extends" : [
         "standard",
-        "standard-react"
+        "standard-react",
+        "plugin:react/recommended"
      ],
      "plugins": [
          "react"
@@ -15,9 +16,15 @@
         "__DEV__": false
     },
     "parserOptions": {
+        "requireConfigFile": false,
         "ecmaVersion": 6,
         "ecmaFeatures": {
             "jsx": true
+        },
+        "babelOptions": {
+            "parserOpts": {
+                "plugins": ["jsx"]
+            }
         }
     },
     "rules": {
