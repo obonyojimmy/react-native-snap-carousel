@@ -1,3 +1,8 @@
+## v3.9.2
+
+* Update package dependencies to eliminate vulnerability warnings
+* Add lint script & fix existing linting errors
+
 ## v3.9.1
 
 * Fix for `getNode()` deprecation warning with RN `0.62+` (thanks [@r0b0t3d](https://github.com/r0b0t3d))
